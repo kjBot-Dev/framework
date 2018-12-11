@@ -1,0 +1,6 @@
+API=127.0.0.1:5700
+token=
+master=919815238
+self_id=2839098896
+log_file="../storage/log"
+DEBUG=true

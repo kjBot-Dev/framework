@@ -1,0 +1,12 @@
+composer.json
+composer.lock
+
+manifest/
+modules/
+storage/
+vendor/
+config.ini
+plugins.php
+modules.php
+test.http
+test.php
