@@ -8,11 +8,11 @@ class DataStorage{
         $this->storagePath = dirname($dir).'/storage/';
     }
 
-    public static function getSQLiteFilepath(string $name){
+    public static function GetSQLiteFilepath(string $name){
         return self::storagePath.$name.'.db';
     }
 
-    public static function setData(string $filePath, $data, bool $pending = false){
+    public static function SetData(string $filePath, $data, bool $pending = false){
         if(!file_exists(dirname(self::storagePath.'data/'.$filePath))){
             if(!mkdir(dirname(self::storagePath.'data/'.$filePath), 0777, true))
             throw new \Exception('Failed to create data dir');
@@ -20,7 +20,7 @@ class DataStorage{
         return file_put_contents(self::storagePath.'data/'.$filePath, $data, $pending?(FILE_APPEND | LOCK_EX):LOCK_EX);
     }
 
-    public static function getData(string $filePath){
+    public static function GetData(string $filePath){
         return file_get_contents(self::storagePath.'data/'.$filePath);
     }
 }
