@@ -12,11 +12,4 @@ class EventFactory{
         }
     }
 
-    private static function createEventFromPostData(){
-
-    }
-
-    private static function createEventFromRawPostData(){
-
-    }
 }

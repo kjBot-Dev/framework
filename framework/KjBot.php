@@ -7,7 +7,7 @@ class KjBot{
 
     private $cq;
     protected $selfId;
-    protected $messageQueue;
+    protected $messageQueue = [];
 
     public function __construct($self_id){
         $this->selfId = $self_id;

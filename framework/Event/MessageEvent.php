@@ -37,4 +37,8 @@ class MessageEvent extends BaseEvent{
     public function getRawMsg(){
         return $this->rMsg;
     }
+
+    public function getSender(){
+        return $this->sender;
+    }
 }

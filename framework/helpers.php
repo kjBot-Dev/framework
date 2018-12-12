@@ -18,7 +18,12 @@ function export($x){
 
 function q($str, int $code = 0, Throwable $prievous = NULL){
     _log('PURPOSE', $str);
-    throw new \Exception($str."\n", $code, $prievous);
+    throw new kjBot\Framework\QuitException($str, $code, $prievous);
+}
+
+function p($str, int $code = 0, Throwable $prievous = NULL){
+    _log('PANIC', $str);
+    throw new kjBot\Framework\PanicException($str, $code, $prievous);
 }
 
 function event2pluginMethods(kjBot\Framework\Event\BaseEvent $event): array{
@@ -59,12 +64,8 @@ function sendBack(string $msg, BaseEvent $event): kjBot\Framework\Message{
     else return new kjBot\Framework\Message($msg, $event->getId(), kjBot\Framework\TargetType::Private);
 }
 
-function isId($str){
-    return (is_int($str) || is_float($str));
-}
-
 function parseQQ($str){
-    if(isId($str))return $str;
+    if(((int)$str)==$str)return $str;
     if(preg_match('/\[CQ:at,qq=(\d+)\]/', $str, $QQ)){
         return $QQ[1];
     }else return NULL;
