@@ -1,10 +1,12 @@
 <?php
 namespace kjBot\Framework;
 
-use kjBot\Framework\Event\MessageEvent;
 use kjBot\SDK\CoolQ;
+use kjBot\Framework\Message;
+use kjBot\Framework\Event\MessageEvent;
 
 abstract class Module{
     public $needCQ = false;
-    public abstract function process(array $args, MessageEvent $event, CoolQ $cq = NULL): Message;
+    public function process(array $args, MessageEvent $event): Message{}
+    public function processWithCQ(array $args, MessageEvent $event, CoolQ $cq = NULL): Message{}
 }

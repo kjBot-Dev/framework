@@ -21,14 +21,16 @@ foreach($Plugins as $pluginName){
             $method = new ReflectionMethod($plugin, $pluginMethods[$plugin->handleDepth]);
         }catch(ReflectionException $e){
             _log('NOTICE', "{$pluginName} not implements {$pluginMethods[$plugin->handleDepth]}");
-        }catch(kjBot\Framework\QuitException $e){
-            $kjBot->addMessage(sendBack($e->getMessage(), $event));
         }finally{
             try{
                 if($method !== NULL)
                 $kjBot->addMessage($method->invoke($plugin, $event));
-            }catch(ReflectionException $e){
-                throw $e;
+            }catch(kjBot\Framework\QuitException $e){
+                $kjBot->addMessage($event->sendBack($e->getMessage()));
+            }catch(\TypeError $e){
+                d($e->getMessage());
+            }catch(\Exception $e){
+                _log('ERROR', "{$pluginName}: {$e->getMessage()}");
             }
         }
     }else{
@@ -48,11 +50,18 @@ if($event instanceof kjBot\Framework\Event\MessageEvent){
         if($module instanceof kjBot\Framework\Module){
             d("{$Modules[$command]} handled command: {$command}");
             try{
-                if($module->needCQ)d("$module request CoolQ instance.");
-                $kjBot->addMessage($module->process($matches, $event, 
-                                   $module->needCQ?$kjBot->getCoolQ():NULL));
+                if($module->needCQ){
+                    _log('NOTICE', "{$module} request CoolQ instance.");
+                    $kjBot->addMessage($module->processWithCQ($matches, $event, $kjBot->getCoolQ()));
+                }else{
+                    $kjBot->addMessage($module->process($matches, $event));
+                }
             }catch(kjBot\Framework\QuitException $e){
-                $kjBot->addMessage(sendBack($e->getMessage(), $event));
+                $kjBot->addMessage($event->sendBack($e->getMessage()));
+            }catch(\TypeError $e){
+                preg_match('/Argument \d+ passed to \S+ must be of the type (\S+), (\S+) given/', $e->getMessage(), $match);
+                d($e->getMessage());
+                $kjBot->addMessage($event->sendBack("[ERROR]: 一个需要 {$match[1]} 的参数位置收到了一个 {$match[2]}"));
             }
         }
     }

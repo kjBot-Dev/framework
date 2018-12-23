@@ -17,12 +17,12 @@ function export($x){
     return var_export($x, true);
 }
 
-function q($str, int $code = 0, Throwable $prievous = NULL){
+function q(string $str, int $code = 0, Throwable $prievous = NULL){
     _log('PURPOSE', $str);
     throw new kjBot\Framework\QuitException($str, $code, $prievous);
 }
 
-function p($str, int $code = 0, Throwable $prievous = NULL){
+function p(string $str, int $code = 0, Throwable $prievous = NULL){
     _log('PANIC', $str);
     throw new kjBot\Framework\PanicException($str, $code, $prievous);
 }
