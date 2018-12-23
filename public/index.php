@@ -3,12 +3,12 @@
 if(function_exists('fastcgi_finish_request'))fastcgi_finish_request();
 require_once('init.php');
 
-$kjBot = new kjBot\Framework\KjBot($Config['self_id']);
-$kjBot->bindCoolQ(new kjBot\SDK\CoolQ($Config['API'], $Config['token']));
+$kjBot = new kjBot\Framework\KjBot(new kjBot\SDK\CoolQ($Config['API'], $Config['token']), $Config['self_id']);
 
 $storage = new kjBot\Framework\Core\DataStorage(__DIR__.'/../../');
 $rawPostData = file_get_contents('php://input');
 $postData = json_decode($rawPostData);
+if(isset($postData->message))$postData->message = kjBot\SDK\CQCode::DecodeCQCode($postData->message);
 $event = kjBot\Framework\Event\EventFactory::createEventFrom($postData);
 $pluginMethods = event2pluginMethods($event);
 
@@ -21,7 +21,7 @@ foreach($Plugins as $pluginName){
             $method = new ReflectionMethod($plugin, $pluginMethods[$plugin->handleDepth]);
         }catch(ReflectionException $e){
             _log('NOTICE', "{$pluginName} not implements {$pluginMethods[$plugin->handleDepth]}");
-        }catch(kjBot\Framework\KjBotException $e){
+        }catch(kjBot\Framework\QuitException $e){
             $kjBot->addMessage(sendBack($e->getMessage(), $event));
         }finally{
             try{
@@ -37,7 +37,6 @@ foreach($Plugins as $pluginName){
 }
 
 if($event instanceof kjBot\Framework\Event\MessageEvent){
-    $event->setMsg(kjBot\SDK\CQCode::DecodeCQCode($event->getMsg()));
     $matches = preg_split('/\s+/', $event->__toString());
     $command = rtrim($matches[0]);
     if($matches==NULL){
@@ -49,8 +48,10 @@ if($event instanceof kjBot\Framework\Event\MessageEvent){
         if($module instanceof kjBot\Framework\Module){
             d("{$Modules[$command]} handled command: {$command}");
             try{
-                $kjBot->addMessage($module->process($matches, $event));
-            }catch(kjBot\Framework\KjBotException $e){
+                if($module->needCQ)d("$module request CoolQ instance.");
+                $kjBot->addMessage($module->process($matches, $event, 
+                                   $module->needCQ?$kjBot->getCoolQ():NULL));
+            }catch(kjBot\Framework\QuitException $e){
                 $kjBot->addMessage(sendBack($e->getMessage(), $event));
             }
         }

@@ -9,12 +9,13 @@ class KjBot{
     protected $selfId;
     protected $messageQueue = [];
 
-    public function __construct($self_id){
-        $this->selfId = $self_id;
+    public function __construct(CoolQ $coolQ, $id = NULL){
+        $this->cq = $coolQ;
+        $this->selfId = $id;
     }
 
-    public function bindCoolQ(CoolQ $coolQ){
-        $this->cq = $coolQ;
+    public function getCoolQ(){
+        return $this->cq;
     }
 
     public function addMessage(?Message $msg){

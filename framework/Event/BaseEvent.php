@@ -1,6 +1,8 @@
 <?php
 namespace kjBot\Framework\Event;
 
+use kjBot\Framework\Message;
+use kjBot\Framework\TargetType;
 class BaseEvent{
 
     public $postType;
@@ -33,5 +35,15 @@ class BaseEvent{
 
     public function getGroupId(){
         return $this->groupId;
+    }
+
+    public function sendPrivate(?string $msg): Message{
+        return new Message($msg, $this->userId, TargetType::Private);
+    }
+
+    public function sendBack(?string $msg): Message{
+        if($this->groupId!==NULL)
+        return new Message($msg, $this->groupId, TargetType::Group);
+        else return new Message($msg, $this->userId, TargetType::Private);
     }
 }
