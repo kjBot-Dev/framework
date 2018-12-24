@@ -19,3 +19,5 @@ class KjBotException extends \Exception{
 class QuitException extends KjBotException{var $prompt = 'ERROR';}
 
 class PanicException extends KjBotException{var $prompt = 'PANIC';}
+
+class SilenceModule{public static $silence = false;}

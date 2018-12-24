@@ -5,7 +5,7 @@ require_once('init.php');
 
 $kjBot = new kjBot\Framework\KjBot(new kjBot\SDK\CoolQ($Config['API'], $Config['token']), $Config['self_id']);
 
-$storage = new kjBot\Framework\Core\DataStorage(__DIR__.'/../../');
+$storage = new kjBot\Framework\DataStorage(__DIR__.'/../../');
 $rawPostData = file_get_contents('php://input');
 $postData = json_decode($rawPostData);
 if(isset($postData->message))$postData->message = kjBot\SDK\CQCode::DecodeCQCode($postData->message);
@@ -38,6 +38,8 @@ foreach($Plugins as $pluginName){
     }
 }
 
+if(kjBot\Framework\SilenceModule::$silence){}
+else{
 if($event instanceof kjBot\Framework\Event\MessageEvent){
     $matches = preg_split('/\s+/', $event->__toString());
     $command = rtrim($matches[0]);
@@ -66,6 +68,7 @@ if($event instanceof kjBot\Framework\Event\MessageEvent){
         }
     }
 }
+}
 
 }catch(kjBot\Framework\PanicException $e){
     $kjBot->addMessage(notifyMaster(($e->getMessage())));
@@ -74,7 +77,7 @@ if($event instanceof kjBot\Framework\Event\MessageEvent){
 foreach($Plugins as $pluginName){
     $plugin = (new ReflectionClass($pluginName))->newInstance();
     if($plugin instanceof kjBot\Framework\Plugin){
-        if((new ReflectionClass($pluginName))->hasMethod('beforePostMessage')){
+        if($plugin->handleQueue){
             _log('NOTICE', "{$pluginName} handlded MessageQueue.");
             try{
                 $plugin->beforePostMessage($kjBot->getMessageQueue());

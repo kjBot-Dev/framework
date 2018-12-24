@@ -1,5 +1,5 @@
 <?php
-namespace kjBot\Framework\Core;
+namespace kjBot\Framework;
 
 class DataStorage{
     private static $storagePath;
@@ -17,10 +17,14 @@ class DataStorage{
             if(!mkdir(dirname(static::$storagePath.'data/'.$filePath), 0777, true))
             throw new \Exception('Failed to create data dir');
         }
-        return file_put_contents(static::$storagePath.'data/'.$filePath, $data, $pending?(FILE_APPEND | LOCK_EX):LOCK_EX);
+        return @file_put_contents(static::$storagePath.'data/'.$filePath, $data, $pending?(FILE_APPEND | LOCK_EX):LOCK_EX);
     }
 
     public static function GetData(string $filePath){
-        return file_get_contents(static::$storagePath.'data/'.$filePath);
+        return @file_get_contents(static::$storagePath.'data/'.$filePath);
+    }
+
+    public static function DelData(string $filePath){
+        return @\unlink(static::$storagePath.'data/'.$filePath);
     }
 }

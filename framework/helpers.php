@@ -13,6 +13,13 @@ function str_replace_once(string $needle, string $replace, string $haystack): st
     return substr_replace($haystack, $replace, $pos, strlen($needle));
 }
 
+function array_2d_search($needle, array $haystack){
+    foreach($haystack as $shit){
+        $result = array_search($needle, $shit);
+        if($result !== false)return $result;
+    }return false;
+}
+
 function export($x){
     return var_export($x, true);
 }
@@ -39,7 +46,7 @@ function event2pluginMethods(BaseEvent $event): array{
     return $methods;
 }
 
-function _log(string $type, string $msg){
+function _log(string $type, ?string $msg){
     global $Config;
     $log = '<'.date('Y-m-d H:i:s').'>['.$type.'] '.$msg."\n";
     if($Config['log_file'] !== NULL && $Config['log_file']!=='')file_put_contents($Config['log_file'], $log, FILE_APPEND);
@@ -56,10 +63,13 @@ function notifyMaster(string $msg): Message{
 }
 
 function parseQQ($str){
-    if(((int)$str)==$str)return $str;
+    if(preg_match('/\d+/', $str, $match) && $match[0] == $str){
+        return $str;
+    }
     if(preg_match('/\[CQ:at,qq=(\d+)\]/', $str, $QQ)){
         return $QQ[1];
-    }else return NULL;
+    }
+    return NULL;
 }
 
 function removeCQCode($text){
