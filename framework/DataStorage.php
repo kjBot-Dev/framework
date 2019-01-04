@@ -2,7 +2,7 @@
 namespace kjBot\Framework;
 
 class DataStorage{
-    private static $storagePath;
+    public static $storagePath;
 
     public function __construct(string $dir){
         static::$storagePath = realpath(dirname($dir).'/storage').'/';

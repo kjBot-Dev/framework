@@ -72,6 +72,25 @@ function parseQQ($str){
     return NULL;
 }
 
+/**
+ * 解析命令
+ * @param string $str 命令字符串
+ * @return mixed array|bool 解析结果数组 失败返回false
+ */
+function parseCommand(string $str){
+    // 正则表达式
+    $regEx = '#(?:(?<s>[\'"])?(?<v>.+?)?(?:(?<!\\\\)\k<s>)|(?<u>[^\'"\s]+))#';
+    // 匹配所有
+    if(!preg_match_all($regEx, $str, $exp_list)) return false;
+    // 遍历所有结果
+    $cmd = array();
+    foreach ($exp_list['s'] as $id => $s) {
+        // 判断匹配到的值
+        $cmd[] = empty($s) ? $exp_list['u'][$id] : $exp_list['v'][$id];
+    }
+    return $cmd;
+}
+
 function removeCQCode($text){
     return preg_replace('/\[CQ:\S+\]/', '', $text);
 }
@@ -82,7 +101,7 @@ function removeCQCode($text){
  * @return string 图片对应的 base64 格式 CQ码
  */
 function sendImg($str):string{
-    return CQCode::Image('base64://'.base64_encode($str));
+    return kjBot\SDK\CQCode::Image('base64://'.base64_encode($str));
 }
 
 /**
@@ -91,7 +110,7 @@ function sendImg($str):string{
  * @return string 录音对应的 base64 格式 CQ码
  */
 function sendRec($str):string{
-    return CQCode::Record('base64://'.base64_encode($str));
+    return kjBot\SDK\CQCode::Record('base64://'.base64_encode($str));
 }
 
 function imageFont($file = 1, $size = 12, $color = '#000000', $align = 'left', $valign = 'buttom', $angle = 0){

@@ -24,7 +24,7 @@ foreach($Plugins as $pluginName){
         }finally{
             try{
                 if($method !== NULL)
-                $kjBot->addMessage($method->invoke($plugin, $event));
+                $kjBot->addMessage(@$method->invoke($plugin, $event));
             }catch(kjBot\Framework\QuitException $e){
                 $kjBot->addMessage($event->sendBack($e->getMessage()));
             }catch(\TypeError $e){
@@ -41,7 +41,7 @@ foreach($Plugins as $pluginName){
 if(kjBot\Framework\SilenceModule::$silence){}
 else{
 if($event instanceof kjBot\Framework\Event\MessageEvent){
-    $matches = preg_split('/\s+/', $event->__toString());
+    $matches = parseCommand($event->__toString());
     $command = rtrim($matches[0]);
     if($matches==NULL){
         $command = $event->getMsg();
