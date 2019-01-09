@@ -11,7 +11,8 @@
     },
     "require": {
         "php": "^7.2",
-        "ext-sqlite3": "^7.2"
+        "ext-openssl": "*",
+        "ext-sqlite3": "*"
     },
     "require-dev": {
     },

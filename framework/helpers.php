@@ -34,6 +34,11 @@ function p(string $str, int $code = 0, Throwable $prievous = NULL){
     throw new kjBot\Framework\PanicException($str, $code, $prievous);
 }
 
+function Config($key, $default = NULL){
+    global $Config;
+    return $Config[$key]??$default;
+}
+
 function event2pluginMethods(BaseEvent $event): array{
     $methods[0] = 'handle';
     $methods[1] = $event->postType;
