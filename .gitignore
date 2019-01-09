@@ -5,6 +5,7 @@ manifest/
 modules/
 storage/
 vendor/
+.repo/
 config.ini
 plugins.php
 modules.php
