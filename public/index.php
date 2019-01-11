@@ -1,5 +1,7 @@
 <?php
 
+use kjBot\Framework\Event\MessageEvent;
+
 if(function_exists('fastcgi_finish_request'))fastcgi_finish_request();
 require_once('init.php');
 
@@ -18,13 +20,21 @@ foreach($Plugins as $pluginName){
     $plugin = (new ReflectionClass($pluginName))->newInstance();
     if($plugin instanceof kjBot\Framework\Plugin){
         try{
-            $method = new ReflectionMethod($plugin, $pluginMethods[$plugin->handleDepth]);
+            $methodNeedCQ = (new ReflectionClass($pluginName))->getConstant('cq_'.$pluginMethods[$plugin->handleDepth]);
+            $methodName = ($methodNeedCQ?'coolq_':'').$pluginMethods[$plugin->handleDepth];
+            $method = new ReflectionMethod($plugin, $methodName);
         }catch(ReflectionException $e){
-            _log('NOTICE', "{$pluginName} not implements {$pluginMethods[$plugin->handleDepth]}");
+            _log('NOTICE', "{$pluginName} not implements {$methodName}");
         }finally{
             try{
-                if($method !== NULL)
-                $kjBot->addMessage(@$method->invoke($plugin, $event));
+                if($method !== NULL){
+                    if($methodNeedCQ){
+                        _log('NOTICE', "{$pluginName} handle {$pluginMethods[$plugin->handleDepth]} request CoolQ instance.");
+                        $kjBot->addMessage(@$method->invoke($plugin, $event, $kjBot->getCoolQ()));
+                    }else{
+                        $kjBot->addMessage(@$method->invoke($plugin, $event));
+                    }
+                }
             }catch(kjBot\Framework\QuitException $e){
                 $kjBot->addMessage($event->sendBack($e->getMessage()));
             }catch(\TypeError $e){
@@ -78,7 +88,7 @@ foreach($Plugins as $pluginName){
     $plugin = (new ReflectionClass($pluginName))->newInstance();
     if($plugin instanceof kjBot\Framework\Plugin){
         if($plugin->handleQueue){
-            _log('NOTICE', "{$pluginName} handlded MessageQueue.");
+            _log('NOTICE', "{$pluginName} handled MessageQueue.");
             try{
                 $plugin->beforePostMessage($kjBot->getMessageQueue());
             }catch(Exception $e){

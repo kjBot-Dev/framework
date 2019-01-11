@@ -3,22 +3,32 @@ namespace kjBot\Framework\Event;
 
 use kjBot\Framework\Message;
 use kjBot\Framework\TargetType;
+
 class BaseEvent{
 
     public $postType;
     public $time;
+    public $type;
+    public $subType;
     protected $userId;
     private $selfId;
 
-    protected $groupId;
+    protected $originalEvent;
 
     public function __construct($obj){
         if(is_object($obj)){
             $this->postType = $obj->post_type;
+            try{
+                $this->type = (new \ReflectionObject($obj))->getProperty($obj->post_type.'_type');
+            }catch(\ReflectionException $e){
+                $this->type = NULL;
+                d("Can't reflect {$obj->post_type}: ".\export($obj));
+            }
+            $this->subType = $obj->sub_type??NULL;
             $this->time = $obj->time;
             $this->userId = $obj->user_id;
             $this->selfId = $obj->self_id;
-            $this->groupId = $obj->group_id??NULL;
+            $this->originalEvent = $obj;
         }else{
             q("Can't create Event from ".$obj);
         }
@@ -29,12 +39,12 @@ class BaseEvent{
         return $this->userId == $this->selfId;
     }
 
-    public function getId(){
-        return $this->userId;
+    public function getEvent(){
+        return $this->originalEvent;
     }
 
-    public function getGroupId(){
-        return $this->groupId;
+    public function getId(){
+        return $this->userId;
     }
 
     public function sendPrivate(?string $msg): Message{
@@ -44,6 +54,10 @@ class BaseEvent{
     public function sendBack(?string $msg): Message{
         if($this->groupId!==NULL)
         return new Message($msg, $this->groupId, TargetType::Group);
-        else return new Message($msg, $this->userId, TargetType::Private);
+        else return $this->sendPrivate($msg);
+    }
+
+    public function sendTo(int $targetType, $target, $msg){
+        return new Message($msg, $target, $targetType);
     }
 }

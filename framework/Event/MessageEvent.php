@@ -3,23 +3,23 @@ namespace kjBot\Framework\Event;
 
 class MessageEvent extends BaseEvent{
     public $msgType;
-    public $sType;
+    public $subType;
     public $font;
     public $msgId;
     protected $msg;
     protected $rMsg;
-    private $sender;
+    protected $senderInfo;
 
     public function __construct($obj){
         if($obj->post_type!=='message')throw new Exception();
         parent::__construct($obj);
         $this->msgType = $obj->message_type;
-        $this->sType = $obj->sub_type;
+        $this->subType = $obj->sub_type;
         $this->font = $obj->font;
         $this->msgId = $obj->message_id;
         $this->msg = $obj->message;
         $this->rMsg = $obj->raw_message;
-        $this->sender = new Sender($obj->sender, ($this->msgType == 'group' && $this->sType == 'normal'));
+        $this->senderInfo = new SenderInfo($obj->sender, ($this->msgType == 'group' && $this->subType == 'normal'));
     }
 
     public function __toString(){
@@ -28,6 +28,7 @@ class MessageEvent extends BaseEvent{
 
     public function setMsg($msg){
         $this->msg = $msg;
+        return $this;
     }
 
     public function getMsg(){
@@ -38,7 +39,7 @@ class MessageEvent extends BaseEvent{
         return $this->rMsg;
     }
 
-    public function getSender(){
-        return $this->sender;
+    public function getSenderInfo(){
+        return $this->senderInfo;
     }
 }

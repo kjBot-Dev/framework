@@ -1,13 +1,13 @@
 <?php
 namespace kjBot\Framework\Event;
 
-class Sender{
+class SenderInfo{
     public $nickname;
     protected $age;
     protected $sex;
-    private $userId;
+    protected $userId;
 
-    public $groupSender = false;
+    public $isGroupSender;
 
     public $card;
     public $level;
@@ -21,6 +21,8 @@ class Sender{
         $this->sex = $obj->sex;
         $this->userId = $obj->user_id;
 
+        $this->isGroupSender = $isGroup;
+
         if($isGroup){
             $this->card = $obj->card;
             $this->level = $obj->level;
@@ -30,8 +32,21 @@ class Sender{
         }
     }
 
-    public function getID(){
-        return $userId;
+    public function getAge(){
+        return $this->age;
     }
 
+    public function getArea(){
+        return $this->area;
+    }
+
+    public function getID(){
+        return $this->userId;
+    }
+
+    public function getSex(){
+        return $this->sex;
+    }
+
+    
 }
