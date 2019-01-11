@@ -26,7 +26,7 @@ class BaseEvent{
             }
             $this->subType = $obj->sub_type??NULL;
             $this->time = $obj->time;
-            $this->userId = $obj->user_id;
+            @$this->userId = $obj->user_id;
             $this->selfId = $obj->self_id;
             $this->originalEvent = $obj;
         }else{
@@ -52,7 +52,7 @@ class BaseEvent{
     }
 
     public function sendBack(?string $msg): Message{
-        if($this->groupId!==NULL)
+        if(@$this->groupId!==NULL)
         return new Message($msg, $this->groupId, TargetType::Group);
         else return $this->sendPrivate($msg);
     }
