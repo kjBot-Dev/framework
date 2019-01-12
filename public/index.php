@@ -1,7 +1,5 @@
 <?php
 
-use kjBot\Framework\Event\MessageEvent;
-
 if(function_exists('fastcgi_finish_request'))fastcgi_finish_request();
 require_once('init.php');
 
@@ -24,7 +22,7 @@ foreach($Plugins as $pluginName){
             $methodName = ($methodNeedCQ?'coolq_':'').$pluginMethods[$plugin->handleDepth];
             $method = new ReflectionMethod($plugin, $methodName);
         }catch(ReflectionException $e){
-            _log('NOTICE', "{$pluginName} not implements {$methodName}");
+            d("{$pluginName} not implements {$methodName}");
         }finally{
             try{
                 if($method !== NULL){
@@ -63,7 +61,7 @@ if($event instanceof kjBot\Framework\Event\MessageEvent){
             d("{$Modules[$command]} handled command: {$command}");
             try{
                 if($module->needCQ){
-                    _log('NOTICE', "{$module} request CoolQ instance.");
+                    d("{$module} request CoolQ instance.");
                     $kjBot->addMessage($module->processWithCQ($matches, $event, $kjBot->getCoolQ()));
                 }else{
                     $kjBot->addMessage($module->process($matches, $event));
@@ -88,7 +86,7 @@ foreach($Plugins as $pluginName){
     $plugin = (new ReflectionClass($pluginName))->newInstance();
     if($plugin instanceof kjBot\Framework\Plugin){
         if($plugin->handleQueue){
-            _log('NOTICE', "{$pluginName} handled MessageQueue.");
+            d("{$pluginName} handled MessageQueue.");
             try{
                 $plugin->beforePostMessage($kjBot->getMessageQueue());
             }catch(Exception $e){
