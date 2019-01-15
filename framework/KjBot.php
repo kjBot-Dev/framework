@@ -18,8 +18,20 @@ class KjBot{
         return $this->cq;
     }
 
-    public function addMessage(?Message $msg){
-        $this->messageQueue[]= $msg;
+    /**
+     * 添加消息
+     *
+     * @param array<Message>|Message $msg
+     * @return void
+     */
+    public function addMessage($msg){
+        if($msg instanceof Message){
+            $this->messageQueue[]= $msg;
+        }else if(is_array($msg)){
+            array_merge($this->messageQueue, $msg);
+        }else{
+            throw new \Exception("Can't add message: ".\export($msg));
+        }
     }
 
     public function postMessage(){

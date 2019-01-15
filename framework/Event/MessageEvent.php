@@ -42,4 +42,10 @@ class MessageEvent extends BaseEvent{
     public function getSenderInfo(){
         return $this->senderInfo;
     }
+
+    public function fromGroup($id = NULL){
+        if($id !== NULL){
+            return $this->groupId == $id;
+        }else return $this->msgType === 'group';
+    }
 }
