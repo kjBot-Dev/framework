@@ -29,6 +29,8 @@ class KjBot{
             $this->messageQueue[]= $msg;
         }else if(is_array($msg)){
             array_merge($this->messageQueue, $msg);
+        }else if($msg === NULL){
+            return;
         }else{
             throw new \Exception("Can't add message: ".\export($msg));
         }
