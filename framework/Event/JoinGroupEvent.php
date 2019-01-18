@@ -16,7 +16,7 @@ class JoinGroupEvent extends RequestEvent{
         return $cq->setGroupAddRequest($this->flag, 'add');
     }
 
-    public function deny(CoolQ $cq, string $reason){
-        return $cq->setGroupAddRequest($this->flag, 'add', false, $reason);
+    public function deny(CoolQ $cq, string $reason = ''){
+        return $cq->setGroupAddRequest($this->flag, 'add', false, $reason = '');
     }
 }

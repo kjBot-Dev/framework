@@ -12,11 +12,11 @@ class FriendRequestEvent extends RequestEvent{
         $this->flag = $obj->flag;
     }
 
-    public function accept(CoolQ $cq, string $remark){
-        return $cq->setFriendAddRequest($flag, true, $remark);
+    public function accept(CoolQ $cq, string $remark = ''){
+        return $cq->setFriendAddRequest($this->flag, true, $remark);
     }
 
     public function deny(CoolQ $cq){
-        return $cq->setFriendAddRequest($flag, false);
+        return $cq->setFriendAddRequest($this->flag, false);
     }
 }

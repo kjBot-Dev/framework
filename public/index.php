@@ -22,7 +22,7 @@ foreach($Plugins as $pluginName){
             $methodName = ($methodNeedCQ?'coolq_':'').$pluginMethods[$plugin->handleDepth];
             $method = new ReflectionMethod($plugin, $methodName);
         }catch(ReflectionException $e){
-            d("{$pluginName} not implements {$methodName}");
+            //silence catch
         }finally{
             try{
                 if($method !== NULL){

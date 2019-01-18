@@ -39,15 +39,11 @@ function Config($key, $default = NULL){
     return $Config[$key]??$default;
 }
 
-function event2pluginMethods(BaseEvent $event): array{
+function event2pluginMethods($event): array{
     $methods[0] = 'handle';
     $methods[1] = $event->postType;
-    $methods[2] = $methods[1];
-    $methods[2].= isset($event->msgType)?'_'.$event->msgType:'';
-    $methods[2].= isset($event->noticeType)?'_'.$event->noticeType:'';
-    $methods[2].= isset($event->requestType)?'_'.$event->requestType:'';
-    $methods[3] = $methods[2];
-    $methods[3].= isset($event->subType)?'_'.$event->subType:'';
+    $methods[2] = $methods[1].(is_null($event->type)?'':('_'.$event->type));
+    $methods[3] = $methods[2].(is_null($event->subType)?'':('_'.$event->subType));
     return $methods;
 }
 

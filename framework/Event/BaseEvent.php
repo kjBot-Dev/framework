@@ -19,7 +19,7 @@ class BaseEvent{
         if(is_object($obj)){
             $this->postType = $obj->post_type;
             try{
-                $this->type = (new \ReflectionObject($obj))->getProperty($obj->post_type.'_type');
+                $this->type = (new \ReflectionObject($obj))->getProperty($obj->post_type.'_type')->getValue($obj);
             }catch(\ReflectionException $e){
                 $this->type = NULL;
                 d("Can't reflect {$obj->post_type}: ".\export($obj));
