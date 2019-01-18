@@ -32,7 +32,7 @@ class EventFactory{
                 }
             case 'request':
                 switch($obj->request_type){
-                    case 'friend_add':
+                    case 'friend':
                         return new FriendRequestEvent($obj);
                     case 'group':
                         switch($obj->sub_type){
