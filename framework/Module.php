@@ -5,7 +5,7 @@ use kjBot\SDK\CoolQ;
 use kjBot\Framework\Event\MessageEvent;
 
 abstract class Module{
-    public $needCQ = false;
+    const needCQ = false;
     public function process(array $args, MessageEvent $event){}
     public function processWithCQ(array $args, MessageEvent $event, CoolQ $cq = NULL){}
 }

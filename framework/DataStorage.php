@@ -21,7 +21,6 @@ class DataStorage{
     }
 
     public static function GetData(string $filePath){
-        if (!file_exists(static::$storagePath.'data/'.$filePath)) return;
         return @file_get_contents(static::$storagePath.'data/'.$filePath);
     }
 
