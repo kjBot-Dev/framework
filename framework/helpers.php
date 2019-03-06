@@ -34,6 +34,11 @@ function p(string $str, int $code = 0, Throwable $prievous = NULL){
     throw new kjBot\Framework\PanicException($str, $code, $prievous);
 }
 
+/**
+ * 获取config
+ * @param [type] $key     获取的key
+ * @param [type] $default [description]
+ */
 function Config($key, $default = NULL){
     global $Config;
     return $Config[$key]??$default;
@@ -47,6 +52,11 @@ function event2pluginMethods($event): array{
     return $methods;
 }
 
+/**
+ * @param  string $type [description]
+ * @param  string $msg  [description]
+ * @return [type]       [description]
+ */
 function _log(string $type, ?string $msg){
     global $Config;
     $log = '<'.date('Y-m-d H:i:s').'>['.$type.'] '.$msg."\n";
@@ -58,11 +68,21 @@ function d(string $msg){
     if($Config['DEBUG'])_log('DEBUG', $msg);
 }
 
+/**
+ * 通知管理员（机器人主人）
+ * @param  string $msg 通知信息
+ * @return [type]      [description]
+ */
 function notifyMaster(string $msg): Message{
     global $Config;
     return new Message($msg, $Config['master'], TargetType::Private);
 }
 
+/**
+ * 解析QQ
+ * @param  [type] $str 被解析的字符串
+ * @return [type]      [description]
+ */
 function parseQQ($str){
     if(preg_match('/\d+/', $str, $match) && $match[0] == $str){
         return $str;
