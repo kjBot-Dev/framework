@@ -57,7 +57,8 @@ if($event instanceof kjBot\Framework\Event\MessageEvent){
         if($module instanceof kjBot\Framework\Module){
             d("{$Modules[$command]} handled command: {$command}");
             try{
-                if($module->needCQ){
+                $methodNeedCQ = (new ReflectionClass($Modules[$command]))->getConstant('needCQ');
+                if($methodNeedCQ){
                     d("{$Modules[$command]} request CoolQ instance.");
                     $kjBot->addMessage($module->processWithCQ($matches, $event, $kjBot->getCoolQ()));
                 }else{
