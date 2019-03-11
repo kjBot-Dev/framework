@@ -2,6 +2,7 @@
 namespace kjBot\Framework;
 
 use kjBot\SDK\CoolQ;
+use \Log;
 
 class KjBot{
 
@@ -28,7 +29,7 @@ class KjBot{
         if($msg instanceof Message){
             $this->messageQueue[]= $msg;
         }else if(is_array($msg)){
-            array_merge($this->messageQueue, $msg);
+            $this->messageQueue = array_merge($this->messageQueue, $msg);
         }else if($msg === NULL){
             return;
         }else{
