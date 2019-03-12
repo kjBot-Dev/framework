@@ -2,7 +2,6 @@
 namespace kjBot\Framework;
 
 use kjBot\SDK\CoolQ;
-use \Log;
 
 class KjBot{
 
