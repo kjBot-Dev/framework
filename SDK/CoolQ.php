@@ -294,6 +294,24 @@ class CoolQ{
         return $this->query($api, $param);
     }
 
+    public function getImage($file) {
+        $api = API::get_image;
+        $param = [
+            'file' => $file
+        ];
+        return $this->query($api, $param);
+    }
+
+    public function canSendImage() {
+        $api = API::can_send_image;
+        return $this->query($api);
+    }
+
+    public function canSendRecord() {
+        $api = API::can_send_record;
+        return $this->query($api);
+    }
+
     public function getStatus(){
         $api = API::get_status;
         $param = [];
