@@ -58,6 +58,16 @@ class BaseEvent{
     }
 
     public function sendTo(int $targetType, $target, $msg){
+        if (is_array($target)) {
+            for ($i = 0; $i < count($target); $i++) {
+                if ($targetType === TargetType::Private) {
+                    require_once('miscClass.php');
+                    throw new kjBot\Framework\KjBotException('群发消息仅可用发送至群');
+                }
+                $Queue[] = new Message($msg, $target[$i], $targetType);
+            }
+            return $Queue;
+        }
         return new Message($msg, $target, $targetType);
     }
 }

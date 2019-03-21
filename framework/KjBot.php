@@ -21,7 +21,7 @@ class KjBot{
     /**
      * 添加消息
      *
-     * @param array<Message>|Message $msg
+     * @param array<Message>||new Message $msg
      * @return void
      */
     public function addMessage($msg){
@@ -40,6 +40,8 @@ class KjBot{
         foreach($this->messageQueue as $message){
             if($message instanceof Message){
                 $message->send($this->cq);
+                // 随机200 - 5000 毫秒间隔
+                usleep(mt_rand(200000,5000000));
             }
         }
     }
