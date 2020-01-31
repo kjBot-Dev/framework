@@ -93,4 +93,8 @@ foreach($Plugins as $pluginName){
     }
 }
 
-$kjBot->postMessage();
+try{
+    $kjBot->postMessage();
+}catch(Exception $e){
+    _log('ERROR', $e->getMessage()."({$e->getCode()})");
+}

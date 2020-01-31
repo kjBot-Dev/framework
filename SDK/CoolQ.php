@@ -304,12 +304,14 @@ class CoolQ{
 
     public function canSendImage() {
         $api = API::can_send_image;
-        return $this->query($api);
+        $param = [];
+        return $this->query($api, $param);
     }
 
     public function canSendRecord() {
         $api = API::can_send_record;
-        return $this->query($api);
+        $param = [];
+        return $this->query($api, $param);
     }
 
     public function getStatus(){

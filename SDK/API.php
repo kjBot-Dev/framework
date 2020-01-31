@@ -33,6 +33,9 @@ class API{
     const get_csrf_token = '/get_csrf_token';
     const get_credentials = '/get_credentials';
     const get_record = '/get_record';
+    const get_image = '/get_image';
+    const can_send_image = '/can_send_image';
+    const can_send_record = '/can_send_record';
     const get_status = '/get_status';
     const get_version_info = '/get_version_info';
     const set_restart = '/set_restart';
