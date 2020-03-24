@@ -53,7 +53,16 @@ class CQCode{
     }
 
     public static function Anonymous($ignore){
-        return $ignore?self::CQ('anonymous', ['ignore' => 'true']):self::CQ('anonymous');
+        return self::CQ('anonymous', $ignore?(['ignore' => 'true']):NULL);
+    }
+
+    public static function Location($lat, $lon, $title, $content){
+        return self::CQ('music', [
+            'lat' => $lat,
+            'lon' => $lon,
+            'title' => $title,
+            'content' => $content,
+        ]);
     }
 
     public static function Music($type, $id){
