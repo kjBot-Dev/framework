@@ -57,7 +57,7 @@ class CQCode{
     }
 
     public static function Location($lat, $lon, $title, $content){
-        return self::CQ('music', [
+        return self::CQ('location', [
             'lat' => $lat,
             'lon' => $lon,
             'title' => $title,
