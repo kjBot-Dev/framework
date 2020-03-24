@@ -6,6 +6,7 @@ class CQCode{
     public static function CQ($type, $argArray = NULL){
         $code='[CQ:'.$type;
         if(NULL !== $argArray) foreach($argArray as $key => $value){
+            if($value === NULL) continue;
             $code.= (','.$key.'='.self::EncodeCQCode($value));
         }
         $code.=']';
@@ -36,15 +37,18 @@ class CQCode{
         return self::CQ('image', ['file' => $file]);
     }
 
-    public static function Record($file){
-        return self::CQ('record', ['file' => $file]);
+    public static function Record($file, $magic = NULL){
+        return self::CQ('record', [
+            'file' => $file,
+            'magic' => $magic,
+        ]);
     }
 
-    public static function Rps($type){
+    public static function Rps($type = NULL){
         return self::CQ('rps', ['type' => $type]);
     }
 
-    public static function Dice($type){
+    public static function Dice($type = NULL){
         return self::CQ('dice', ['type' => $type]);
     }
     
@@ -52,8 +56,8 @@ class CQCode{
         return self::CQ('shake');
     }
 
-    public static function Anonymous($ignore){
-        return self::CQ('anonymous', $ignore?(['ignore' => 'true']):NULL);
+    public static function Anonymous($ignore = NULL){
+        return self::CQ('anonymous', ['ignore' => $ignore]);
     }
 
     public static function Location($lat, $lon, $title, $content){
@@ -65,25 +69,26 @@ class CQCode{
         ]);
     }
 
-    public static function Music($type, $id){
+    public static function Music($type, $id, $style = NULL){
         return self::CQ('music', [
             'type' => $type,
             'id' => $id,
+            'style' => $style,
         ]);
     }
 
-    public static function CustomMusic($audio, $url, $title, $content, $image){
+    public static function CustomMusic($url, $audio, $title, $content = NULL, $image = NULL){
         return self::CQ('music', [
             'type' => 'custom',
-            'audio' => $audio,
             'url' => $url,
+            'audio' => $audio,
             'title' => $title,
             'content' => $content,
-            'image' => $image
+            'image' => $image,
         ]);
     }
 
-    public static function Share($url, $title, $content, $image){
+    public static function Share($url, $title, $content = NULL, $image = NULL){
         return self::CQ('share', [
             'url' => $url,
             'title' => $title,
@@ -93,6 +98,9 @@ class CQCode{
     }
 
     public static function EncodeCQCode($str){
+        if($str === true) return 'true';
+        if($str === false) return 'false';
+        //if($str === NULL) return ?; //这种情况的处理待定
         return str_replace([
             '&',
             '[',
