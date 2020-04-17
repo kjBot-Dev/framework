@@ -8,7 +8,7 @@ $kjBot = new kjBot\Framework\KjBot(new kjBot\SDK\CoolQ($Config['API'], $Config['
 $storage = new kjBot\Framework\DataStorage(__DIR__.'/../../');
 $rawPostData = file_get_contents('php://input');
 $postData = json_decode($rawPostData);
-if(isset($postData->message))$postData->message = kjBot\SDK\CQCode::DecodeCQCode($postData->message);
+if(isset($postData->message))$postData->message = kjBot\SDK\CQCode::DecodeCQCode($postData->message); //FIXME 存在转义问题 ref: https://docs.cqp.im/manual/cqcode/
 $event = kjBot\Framework\Event\EventFactory::createEventFrom($postData);
 $pluginMethods = event2pluginMethods($event);
 
