@@ -33,14 +33,20 @@ class CQCode{
         return self::CQ('emoji', ['id' => $id]);
     }
 
-    public static function Image($file){
-        return self::CQ('image', ['file' => $file]);
+    public static function Image($file, $cache = 1, $timeout = 0){
+        return self::CQ('image', [
+            'file' => $file,
+            'cache' => $cache,
+            'timeout' => $timeout,
+        ]);
     }
 
-    public static function Record($file, $magic = NULL){
+    public static function Record($file, $magic = NULL, $cache = 1, $timeout = 0){
         return self::CQ('record', [
             'file' => $file,
             'magic' => $magic,
+            'cache' => $cache,
+            'timeout' => $timeout,
         ]);
     }
 
