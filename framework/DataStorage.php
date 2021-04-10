@@ -12,10 +12,13 @@ class DataStorage{
         return static::$storagePath.$name.'.db';
     }
 
-    public static function SetData(string $filePath, $data, bool $pending = false){
+    public static function SetData(string $filePath, $data, bool $pending = false, bool $override = true){
         if(!file_exists(dirname(static::$storagePath.'data/'.$filePath))){
             if(!mkdir(dirname(static::$storagePath.'data/'.$filePath), 0777, true))
             throw new \Exception('Failed to create data dir');
+        }
+        if(!$override){
+            if(file_exists(static::$storagePath.'data/'.$filePath)) return true;
         }
         return @file_put_contents(static::$storagePath.'data/'.$filePath, $data, $pending?(FILE_APPEND | LOCK_EX):LOCK_EX);
     }
