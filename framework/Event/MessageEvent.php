@@ -11,7 +11,7 @@ class MessageEvent extends BaseEvent{
     protected $senderInfo;
 
     public function __construct($obj){
-        if($obj->post_type!=='message')throw new Exception();
+        if($obj->post_type!=='message')throw new \Exception();
         parent::__construct($obj);
         $this->msgType = $obj->message_type;
         $this->subType = $obj->sub_type;

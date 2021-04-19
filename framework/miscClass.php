@@ -9,7 +9,7 @@ class TargetType{
 class KjBotException extends \Exception{
     protected $prompt;
 
-    public function __construct(string $message = '', int $code = 0, Throwable $previous = NULL){
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = NULL){
         $this->message = "[{$this->prompt}]".(($message=='')?'':": {$message}");
         $this->code = $code;
         $this->previous = $previous;
