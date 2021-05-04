@@ -21,7 +21,7 @@ class KjBot{
     /**
      * 添加消息
      *
-     * @param array<Message>||new Message $msg
+     * @param array<Message>||Message $msg
      * @return void
      */
     public function addMessage($msg){

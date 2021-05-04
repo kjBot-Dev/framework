@@ -43,6 +43,7 @@ class BaseEvent{
         return $this->originalEvent;
     }
 
+    //返回用户ID，注意不是事件ID
     public function getId(){
         return $this->userId;
     }
